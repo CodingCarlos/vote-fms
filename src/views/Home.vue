@@ -1,18 +1,20 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <FreestylerCard
+      name="Manolo Lama"
+      pic="https://picsum.photos/200"
+    />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue';
+import FreestylerCard from '@/components/FreestylerCard.vue';
 
 export default {
   name: 'Home',
   components: {
-    HelloWorld,
+    FreestylerCard,
   },
 };
 </script>
