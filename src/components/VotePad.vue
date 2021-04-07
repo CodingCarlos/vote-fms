@@ -39,8 +39,6 @@ export default {
   }),
   methods: {
     vote(value) {
-      console.log(`Votes disabled... yet ${value}`);
-
       this.$emit('vote', value);
     },
   },

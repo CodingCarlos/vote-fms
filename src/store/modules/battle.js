@@ -1,3 +1,7 @@
+import { firestoreAction } from 'vuexfire';
+
+import { db } from '@/firebase';
+
 // Inital state
 const initialState = {
   freestylers: [],
@@ -15,10 +19,23 @@ const initialState = {
     freestyler: 0,
     pattern: 0,
   },
+  votes: [],
 };
 
 // Getters
-const getters = {};
+const getters = {
+  getVotes: (state) => (mode, freestyler, pattern) => {
+    const vote = state.votes.find((item) => {
+      if (item.mode === mode && item.freestyler === freestyler && item.pattern === pattern) {
+        return true;
+      }
+
+      return false;
+    });
+
+    return (vote && vote.value) || 0;
+  },
+};
 
 // Actions
 const actions = {
@@ -28,6 +45,15 @@ const actions = {
   nextMode({ commit, state }) {
     const nextMode = state.status.mode + 1;
     commit('setMode', nextMode);
+  },
+  nextFreestyler({ commit, state }) {
+    let nextFreestyler = state.status.freestyler + 1;
+
+    if (nextFreestyler >= state.freestylers.length) {
+      nextFreestyler = 0;
+    }
+
+    commit('setFreestyler', nextFreestyler);
   },
   nextPattern({ commit, state }) {
     const currentMode = state.status.mode;
@@ -43,6 +69,16 @@ const actions = {
   setPattern({ commit }, pattern) {
     commit('setPattern', pattern);
   },
+  vote({ state }, value) {
+    const vote = {
+      value,
+      mode: state.status.mode,
+      freestyler: state.status.freestyler,
+      pattern: state.status.pattern,
+    };
+    return db.collection('votes').add(vote);
+  },
+  bindVotes: firestoreAction(({ bindFirestoreRef }) => bindFirestoreRef('votes', db.collection('votes'))),
 };
 
 // Mutations
@@ -55,6 +91,9 @@ const mutations = {
   },
   setPattern(state, pattern) {
     state.status.pattern = pattern;
+  },
+  setFreestyler(state, freestyler) {
+    state.status.freestyler = freestyler;
   },
 };
 

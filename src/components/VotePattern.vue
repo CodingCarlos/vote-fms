@@ -1,9 +1,9 @@
 <template>
   <div
-    class="vote-pattern"
+    class="vote-pattern py-1 px-5"
     :class="{ 'active-pattern': active }"
   >
-    0
+    <slot />
   </div>
 </template>
 

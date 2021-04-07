@@ -14,7 +14,9 @@
         v-for="pattern in patterns"
         :key="pattern"
         :active="isPatternActive(pattern)"
-      />
+      >
+        {{ $store.getters['battle/getVotes'](mode, index, pattern - 1) }}
+      </VotePattern>
     </div>
 
     <div class="d-flex align-center justify-center">
@@ -64,6 +66,9 @@ export default {
       const mode = 0;
 
       return this.$store.state.battle.format.modes[mode].patterns;
+    },
+    mode() {
+      return this.$store.state.battle.status.mode;
     },
   },
   methods: {

@@ -1,10 +1,12 @@
 <template>
   <div class="vote fill-height d-flex flex-column">
     <v-container class="flex-grow">
+      <!-- {{ $store.state.battle.votes }} -->
       <v-row>
         <v-col
           v-for="(freestyler, index) in freestylers"
           :key="freestyler.id"
+          cols="6"
         >
           <VoteFreestyler
             :pic="freestyler.pic"
@@ -17,7 +19,7 @@
 
     <div class="vote-pad">
       <VotePad
-        @vote="nextPattern()"
+        @vote="vote"
       />
     </div>
   </div>
@@ -42,29 +44,40 @@ export default {
   },
 
   methods: {
+    vote(value) {
+      this.$store.dispatch('battle/vote', value);
+      this.nextPattern();
+    },
     nextPattern() {
       const currentMode = this.$store.state.battle.status.mode;
       const currentPattern = this.$store.state.battle.status.pattern;
       const totalPatterns = this.$store.state.battle.format.modes[currentMode].patterns - 1;
 
-      console.log('currentPattern');
-      console.log(currentPattern);
-      console.log('totalPatterns');
-      console.log(totalPatterns);
+      // console.log('currentPattern');
+      // console.log(currentPattern);
+      // console.log('totalPatterns');
+      // console.log(totalPatterns);
 
       // Si estamos entre patrones, siguiente patrón
       if (currentPattern < totalPatterns) {
         this.$store.dispatch('battle/nextPattern');
       } else if (currentPattern === totalPatterns) {
         // Si es el último patrón, a los modos especiales
-        console.log('Vota modo especial. Mañana ya si eso...');
-        this.$store.dispatch('battle/setPattern', -1);
+        // console.log('Vota modo especial. Mañana ya si eso...');
+
+        // CUIDADO!! Esto no va aquí. Es un workarround para ir más rápido.
+        // --> En realidad toca votar los modos especiales.
+        this.$store.dispatch('battle/nextFreestyler');
+        this.$store.dispatch('battle/nextPattern');
       }
 
       // Si es el último modo especial de un freestyler que no sea el último, siguiente freestyler
 
       // Si es el último modo especial del último freestyler, siquiente modo.
     },
+  },
+  created() {
+    this.$store.dispatch('battle/bindVotes');
   },
 };
 </script>
