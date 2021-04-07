@@ -7,9 +7,14 @@ const initialState = {
   freestylers: [],
   format: {
     name: 'FMS 2021',
+    // ToDo: Añadir todos los modos del formato FMS 2021
     modes: [
       {
         name: 'Easy Mode',
+        patterns: 6,
+      },
+      {
+        name: 'Hard Mode',
         patterns: 16,
       },
     ],
@@ -55,6 +60,9 @@ const actions = {
     }
 
     commit('setFreestyler', nextFreestyler);
+  },
+  setFreestyler({ commit }, freestyler) {
+    commit('setFreestyler', freestyler);
   },
   nextPattern({ commit, state }) {
     const currentMode = state.status.mode;

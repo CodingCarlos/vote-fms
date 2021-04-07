@@ -62,14 +62,11 @@ export default {
     },
   },
   computed: {
-    patterns() {
-      // OJO! Esto está HARDCODED! Habrá que sacarlo del modo actual.
-      const mode = 0;
-
-      return this.$store.state.battle.format.modes[mode].patterns;
-    },
     mode() {
       return this.$store.state.battle.status.mode;
+    },
+    patterns() {
+      return this.$store.state.battle.format.modes[this.mode].patterns;
     },
   },
   methods: {
