@@ -14,6 +14,7 @@
         v-for="pattern in patterns"
         :key="pattern"
         :active="isPatternActive(pattern)"
+        @click="selectPattern(pattern)"
       >
         {{ $store.getters['battle/getVotes'](mode, index, pattern - 1) }}
       </VotePattern>
@@ -80,6 +81,12 @@ export default {
 
       const activePattern = this.$store.state.battle.status.pattern + 1;
       return pattern === activePattern;
+    },
+    selectPattern(pattern) {
+      this.$store.dispatch('battle/setStatus', {
+        pattern: pattern - 1,
+        freestyler: this.index,
+      });
     },
   },
 };

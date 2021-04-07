@@ -10,7 +10,7 @@ const initialState = {
     modes: [
       {
         name: 'Easy Mode',
-        patterns: 9,
+        patterns: 16,
       },
     ],
   },
@@ -25,6 +25,7 @@ const initialState = {
 // Getters
 const getters = {
   getVotes: (state) => (mode, freestyler, pattern) => {
+    // ToDo: Coger la votación por ID en vez de buscar (formato: MODE_FREESYLER_PATTERN)
     const vote = state.votes.find((item) => {
       if (item.mode === mode && item.freestyler === freestyler && item.pattern === pattern) {
         return true;
@@ -69,6 +70,17 @@ const actions = {
   setPattern({ commit }, pattern) {
     commit('setPattern', pattern);
   },
+  setStatus({ commit }, { mode, freestyler, pattern }) {
+    if (typeof mode === 'number') {
+      commit('setMode', mode);
+    }
+    if (typeof freestyler === 'number') {
+      commit('setFreestyler', freestyler);
+    }
+    if (typeof pattern === 'number') {
+      commit('setPattern', pattern);
+    }
+  },
   vote({ state }, value) {
     const vote = {
       value,
@@ -76,7 +88,10 @@ const actions = {
       freestyler: state.status.freestyler,
       pattern: state.status.pattern,
     };
-    return db.collection('votes').add(vote);
+
+    // ToDo: Crear una función que genere los ID
+    const id = `${vote.mode}_${vote.freestyler}_${vote.pattern}`;
+    return db.collection('votes').doc(id).set(vote);
   },
   bindVotes: firestoreAction(({ bindFirestoreRef }) => bindFirestoreRef('votes', db.collection('votes'))),
 };
@@ -89,11 +104,11 @@ const mutations = {
   setMode(state, mode) {
     state.status.mode = mode;
   },
-  setPattern(state, pattern) {
-    state.status.pattern = pattern;
-  },
   setFreestyler(state, freestyler) {
     state.status.freestyler = freestyler;
+  },
+  setPattern(state, pattern) {
+    state.status.pattern = pattern;
   },
 };
 

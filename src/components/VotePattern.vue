@@ -2,6 +2,7 @@
   <div
     class="vote-pattern py-1 px-5"
     :class="{ 'active-pattern': active }"
+    @click="$emit('click')"
   >
     <slot />
   </div>

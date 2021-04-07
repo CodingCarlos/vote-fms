@@ -1,7 +1,7 @@
 <template>
   <div class="vote fill-height d-flex flex-column">
     <v-container class="flex-grow">
-      <!-- {{ $store.state.battle.votes }} -->
+      {{ $store.state.battle.votes }}
       <v-row>
         <v-col
           v-for="(freestyler, index) in freestylers"
